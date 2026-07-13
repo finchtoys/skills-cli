@@ -26,7 +26,7 @@ npx @finchtoys/skills add ./my-skill
 npx @finchtoys/skills add owner/repository --global
 ```
 
-Skills extend Finch with reusable instructions and workflows. See the [Finch documentation](https://finchwork.app/docs) for authoring and usage guidance.
+Skills extend Finch with reusable instructions and workflows. See the [Finch documentation](https://finchwork.app/en/docs/skills) for authoring and usage guidance.
 
 ## License
 
