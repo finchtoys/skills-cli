@@ -31,14 +31,16 @@ function readJson(path, fallback) {
 
 function configuredAgentHome() {
   const state = readJson(join(finchRuntimeHome(), "workspace.json"), {});
-  const configured = typeof state.finchHomeDir === "string" && state.finchHomeDir.trim()
-    ? state.finchHomeDir.trim()
-    : join(homedir(), "finchnest");
+  const configured = typeof process.env.FINCH_AGENT_HOME === "string" && process.env.FINCH_AGENT_HOME.trim()
+    ? process.env.FINCH_AGENT_HOME.trim()
+    : typeof state.finchHomeDir === "string" && state.finchHomeDir.trim()
+      ? state.finchHomeDir.trim()
+      : join(homedir(), basename(finchRuntimeHome()) === ".finch-dev" ? "finchnest-dev" : "finchnest");
   return resolve(expandHomePath(configured));
 }
 
 function globalSkillsDir() {
-  return join(homedir(), ".finch", "skills");
+  return join(finchRuntimeHome(), "skills");
 }
 
 function personalSkillsDir() {
@@ -634,7 +636,7 @@ Usage:
   where                              Show install directories
 
 Flags:
-  --global        Operate on ~/.finch/skills/
+  --global        Operate on FINCH_RUNTIME_HOME/skills/ (default ~/.finch/skills/)
   --cwd [path]    Operate on process.cwd()/.finch/skills/ or path/.finch/skills/
   --skill <name>  Pick one skill by name when a repo contains several
 
