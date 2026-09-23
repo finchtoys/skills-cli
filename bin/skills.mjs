@@ -32,11 +32,14 @@ function readJson(path, fallback) {
 function configuredAgentHome() {
   const state = readJson(join(finchRuntimeHome(), "config", "settings.json"), {});
   const homeDir = state?.general?.finchHomeDir;
+  const legacyHomeDir = readJson(join(finchRuntimeHome(), "workspace.json"), {})?.finchHomeDir;
   const configured = typeof process.env.FINCH_AGENT_HOME === "string" && process.env.FINCH_AGENT_HOME.trim()
     ? process.env.FINCH_AGENT_HOME.trim()
     : typeof homeDir === "string" && homeDir.trim()
       ? homeDir.trim()
-      : join(homedir(), basename(finchRuntimeHome()) === ".finch-dev" ? "finchnest-dev" : "finchnest");
+      : typeof legacyHomeDir === "string" && legacyHomeDir.trim()
+        ? legacyHomeDir.trim()
+        : join(homedir(), basename(finchRuntimeHome()) === ".finch-dev" ? "finchnest-dev" : "finchnest");
   return resolve(expandHomePath(configured));
 }
 
