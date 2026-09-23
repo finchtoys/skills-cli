@@ -30,11 +30,12 @@ function readJson(path, fallback) {
 }
 
 function configuredAgentHome() {
-  const state = readJson(join(finchRuntimeHome(), "workspace.json"), {});
+  const state = readJson(join(finchRuntimeHome(), "config", "settings.json"), {});
+  const homeDir = state?.general?.finchHomeDir;
   const configured = typeof process.env.FINCH_AGENT_HOME === "string" && process.env.FINCH_AGENT_HOME.trim()
     ? process.env.FINCH_AGENT_HOME.trim()
-    : typeof state.finchHomeDir === "string" && state.finchHomeDir.trim()
-      ? state.finchHomeDir.trim()
+    : typeof homeDir === "string" && homeDir.trim()
+      ? homeDir.trim()
       : join(homedir(), basename(finchRuntimeHome()) === ".finch-dev" ? "finchnest-dev" : "finchnest");
   return resolve(expandHomePath(configured));
 }
@@ -641,7 +642,7 @@ Flags:
   --skill <name>  Pick one skill by name when a repo contains several
 
 Default location:
-  workspace.json#finchHomeDir/.finch/skills/
+  config/settings.json#general.finchHomeDir/.finch/skills/
 `.trim());
 }
 
